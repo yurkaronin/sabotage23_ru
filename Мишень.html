@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Кастомный Курсор: Крестовина с Мишенью</title>
+    <style>
+        /* Скрываем стандартный курсор */
+        body {
+            cursor: none;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-color: #1e1e1e; /* Темный фон для лучшего контраста */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+
+        .content {
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .interactive {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer; /* Этот курсор будет скрыт, но добавим эффект при наведении */
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        .interactive:hover {
+            background-color: #218838;
+        }
+
+        /* Стили для кастомного курсора */
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 40px;
+            height: 40px;
+            pointer-events: none; /* Чтобы курсор не блокировал клики */
+            z-index: 10000; /* Убедитесь, что курсор находится поверх других элементов */
+            transform: translate(-50%, -50%);
+            transition: transform 0.15s ease, opacity 0.15s ease;
+        }
+
+        /* Крестовина */
+        .custom-cursor .crosshair {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 20px;
+            background-color: #ff0000;
+            transform: translate(-50%, -50%);
+        }
+
+        .custom-cursor .crosshair.horizontal {
+            width: 20px;
+            height: 2px;
+        }
+
+        /* Мишень: концентрические круги */
+        .custom-cursor .target {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+            border: 2px solid #00ff00;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 5px rgba(0, 255, 0, 0.7);
+            animation: pulse 2s infinite;
+        }
+
+        .custom-cursor .target::before,
+        .custom-cursor .target::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .custom-cursor .target::before {
+            width: 10px;
+            height: 10px;
+            background-color: #00ff00;
+            top: 50%;
+            left: 50%;
+            box-shadow: 0 0 5px rgba(0, 255, 0, 0.7);
+        }
+
+        .custom-cursor .target::after {
+            width: 4px;
+            height: 4px;
+            background-color: #ffffff;
+            top: 50%;
+            left: 50%;
+            box-shadow: 0 0 2px rgba(255, 255, 255, 0.7);
+        }
+
+        /* Анимация пульсации мишени */
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Эффекты при наведении на интерактивные элементы */
+        .custom-cursor.hovered .crosshair,
+        .custom-cursor.hovered .target {
+            background-color: #00ff00; /* Зеленый цвет при наведении */
+            border-color: #00ff00;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Кастомный Курсор: Крестовина с Мишенью</h1>
+        <button class="interactive">Кнопка</button>
+        <a href="#" class="interactive" style="margin-top: 10px;">Ссылка</a>
+    </div>
+
+    <!-- Элемент кастомного курсора -->
+    <div class="custom-cursor" id="customCursor">
+        <div class="crosshair vertical"></div>
+        <div class="crosshair horizontal"></div>
+        <div class="target"></div>
+    </div>
+
+    <script>
+        // Получаем элемент кастомного курсора
+        const customCursor = document.getElementById('customCursor');
+
+        // Обработчик движения мыши
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+
+            // Обновляем позицию кастомного курсора
+            customCursor.style.left = `${x}px`;
+            customCursor.style.top = `${y}px`;
+        });
+
+        // Обработчики для интерактивных элементов
+        const interactiveElements = document.querySelectorAll('.interactive');
+
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                customCursor.classList.add('hovered');
+            });
+
+            el.addEventListener('mouseleave', () => {
+                customCursor.classList.remove('hovered');
+            });
+        });
+
+        // Дополнительно: Изменение прозрачности при нажатии кнопки мыши
+        document.addEventListener('mousedown', () => {
+            customCursor.style.opacity = '0.6';
+        });
+
+        document.addEventListener('mouseup', () => {
+            customCursor.style.opacity = '1';
+        });
+    </script>
+</body>
+</html>
